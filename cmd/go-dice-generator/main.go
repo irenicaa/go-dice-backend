@@ -8,7 +8,15 @@ import (
 func main() {
 	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
 		log.Print("received a request at " + request.URL.String())
-		writer.Write([]byte("Hello, user!"))
+
+		var message string
+		if name := request.FormValue("name"); name != "" {
+			message = "Hello, user " + name + "!"
+		} else {
+			message = "Hello, user!"
+		}
+
+		writer.Write([]byte(message))
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
