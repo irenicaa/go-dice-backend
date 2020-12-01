@@ -1,22 +1,44 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/irenicaa/go-dice-generator/generator"
+	httputils "github.com/irenicaa/go-dice-generator/http-utils"
+	"github.com/irenicaa/go-dice-generator/models"
 )
 
 func main() {
-	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
 		log.Print("received a request at " + request.URL.String())
 
-		var message string
-		if name := request.FormValue("name"); name != "" {
-			message = "Hello, user " + name + "!"
-		} else {
-			message = "Hello, user!"
+		tries, err := httputils.GetIntFormValue(request, "tries")
+		if err != nil {
+			message := fmt.Sprintf("unable to get the tries parameter: %v", err)
+			log.Print(message)
+
+			writer.WriteHeader(http.StatusBadRequest)
+			writer.Write([]byte(message))
+
+			return
 		}
 
-		writer.Write([]byte(message))
+		faces, err := httputils.GetIntFormValue(request, "faces")
+		if err != nil {
+			message := fmt.Sprintf("unable to get the faces parameter: %v", err)
+			log.Print(message)
+
+			writer.WriteHeader(http.StatusBadRequest)
+			writer.Write([]byte(message))
+
+			return
+		}
+
+		dice := models.Dice{Tries: tries, Faces: faces}
+		values := generator.GenerateDice(dice)
+		fmt.Fprint(writer, values)
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
