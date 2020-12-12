@@ -14,7 +14,7 @@ func main() {
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
 		log.Print("received a request at " + request.URL.String())
 
-		tries, err := httputils.GetIntFormValue(request, "tries")
+		tries, err := httputils.GetIntFormValue(request, "tries", 1, 100)
 		if err != nil {
 			message := fmt.Sprintf("unable to get the tries parameter: %v", err)
 			log.Print(message)
@@ -25,7 +25,7 @@ func main() {
 			return
 		}
 
-		faces, err := httputils.GetIntFormValue(request, "faces")
+		faces, err := httputils.GetIntFormValue(request, "faces", 2, 100)
 		if err != nil {
 			message := fmt.Sprintf("unable to get the faces parameter: %v", err)
 			log.Print(message)
