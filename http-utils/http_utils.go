@@ -7,6 +7,11 @@ import (
 	"strconv"
 )
 
+// Logger ...
+type Logger interface {
+	Print(arguments ...interface{})
+}
+
 // GetIntFormValue ...
 func GetIntFormValue(
 	request *http.Request,
@@ -31,4 +36,19 @@ func GetIntFormValue(
 	}
 
 	return valueAsInt, nil
+}
+
+// HandleError ...
+func HandleError(
+	writer http.ResponseWriter,
+	logger Logger,
+	status int,
+	format string,
+	arguments ...interface{},
+) {
+	message := fmt.Sprintf(format, arguments...)
+	logger.Print(message)
+
+	writer.WriteHeader(status)
+	writer.Write([]byte(message))
 }
