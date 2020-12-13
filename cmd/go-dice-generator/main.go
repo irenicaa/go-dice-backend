@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,7 +40,19 @@ func main() {
 		dice := models.Dice{Tries: tries, Faces: faces}
 		values := generator.GenerateDice(dice)
 		results := models.NewRollResults(values)
-		fmt.Fprintf(writer, "%+v", results)
+		resultsBytes, err := json.Marshal(results)
+		if err != nil {
+			message := fmt.Sprintf("unable to marshal the roll results: %v", err)
+			log.Print(message)
+
+			writer.WriteHeader(http.StatusInternalServerError)
+			writer.Write([]byte(message))
+
+			return
+		}
+
+		writer.Header().Set("Content-Type", "application/json")
+		writer.Write(resultsBytes)
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
