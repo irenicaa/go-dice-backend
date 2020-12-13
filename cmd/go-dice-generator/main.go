@@ -38,7 +38,8 @@ func main() {
 
 		dice := models.Dice{Tries: tries, Faces: faces}
 		values := generator.GenerateDice(dice)
-		fmt.Fprint(writer, values)
+		results := models.NewRollResults(values)
+		fmt.Fprintf(writer, "%+v", results)
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
