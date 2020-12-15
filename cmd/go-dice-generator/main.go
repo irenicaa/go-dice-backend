@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/irenicaa/go-dice-generator/generator"
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
@@ -12,27 +12,32 @@ import (
 )
 
 func main() {
+	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
-		log.Print("received a request at " + request.URL.String())
+		logger.Print("received a request at " + request.URL.String())
 
 		tries, err := httputils.GetIntFormValue(request, "tries", 1, 100)
 		if err != nil {
-			message := fmt.Sprintf("unable to get the tries parameter: %v", err)
-			log.Print(message)
-
-			writer.WriteHeader(http.StatusBadRequest)
-			writer.Write([]byte(message))
+			httputils.HandleError(
+				writer,
+				logger,
+				http.StatusBadRequest,
+				"unable to get the tries parameter: %v",
+				err,
+			)
 
 			return
 		}
 
 		faces, err := httputils.GetIntFormValue(request, "faces", 2, 100)
 		if err != nil {
-			message := fmt.Sprintf("unable to get the faces parameter: %v", err)
-			log.Print(message)
-
-			writer.WriteHeader(http.StatusBadRequest)
-			writer.Write([]byte(message))
+			httputils.HandleError(
+				writer,
+				logger,
+				http.StatusBadRequest,
+				"unable to get the faces parameter: %v",
+				err,
+			)
 
 			return
 		}
@@ -42,11 +47,13 @@ func main() {
 		results := models.NewRollResults(values)
 		resultsBytes, err := json.Marshal(results)
 		if err != nil {
-			message := fmt.Sprintf("unable to marshal the roll results: %v", err)
-			log.Print(message)
-
-			writer.WriteHeader(http.StatusInternalServerError)
-			writer.Write([]byte(message))
+			httputils.HandleError(
+				writer,
+				logger,
+				http.StatusInternalServerError,
+				"unable to marshal the roll results: %v",
+				err,
+			)
 
 			return
 		}
@@ -56,6 +63,6 @@ func main() {
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 }
