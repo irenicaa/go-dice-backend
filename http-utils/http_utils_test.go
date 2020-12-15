@@ -1,8 +1,11 @@
 package httputils
 
 import (
+	"bytes"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -85,6 +88,65 @@ func TestGetIntFormValue(t *testing.T) {
 
 			assert.Equal(t, tt.want, got)
 			tt.wantErr(t, err)
+		})
+	}
+}
+
+func TestHandleError(t *testing.T) {
+	type args struct {
+		logger    Logger
+		status    int
+		format    string
+		arguments []interface{}
+	}
+
+	tests := []struct {
+		name         string
+		args         args
+		wantResponse *http.Response
+	}{
+		{
+			name: "succes",
+			args: args{
+				logger: func() Logger {
+					logger := &MockLogger{}
+					logger.InnerMock.
+						On("Print", []interface{}{"test: 23 one"}).
+						Return().
+						Times(1)
+
+					return logger
+				}(),
+				status:    http.StatusNotFound,
+				format:    "test: %d %s",
+				arguments: []interface{}{23, "one"},
+			},
+			wantResponse: &http.Response{
+				Status: strconv.Itoa(http.StatusNotFound) + " " +
+					http.StatusText(http.StatusNotFound),
+				StatusCode:    http.StatusNotFound,
+				Proto:         "HTTP/1.1",
+				ProtoMajor:    1,
+				ProtoMinor:    1,
+				Header:        http.Header{},
+				Body:          ioutil.NopCloser(bytes.NewReader([]byte("test: 23 one"))),
+				ContentLength: -1,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			responseRecorder := httptest.NewRecorder()
+			HandleError(
+				responseRecorder,
+				tt.args.logger,
+				tt.args.status,
+				tt.args.format,
+				tt.args.arguments...,
+			)
+
+			tt.args.logger.(*MockLogger).InnerMock.AssertExpectations(t)
+			assert.Equal(t, tt.wantResponse, responseRecorder.Result())
 		})
 	}
 }
