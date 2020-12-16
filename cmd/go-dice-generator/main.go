@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/irenicaa/go-dice-generator/generator"
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
@@ -12,6 +14,8 @@ import (
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
 		logger.Print("received a request at " + request.URL.String())
