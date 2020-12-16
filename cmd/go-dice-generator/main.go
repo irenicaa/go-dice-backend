@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/irenicaa/go-dice-generator/generator"
@@ -15,6 +17,9 @@ import (
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+
+	port := flag.Int("port", 8080, "")
+	flag.Parse()
 
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
@@ -66,7 +71,8 @@ func main() {
 		writer.Write(resultsBytes)
 	})
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	address := ":" + strconv.Itoa(*port)
+	if err := http.ListenAndServe(address, nil); err != nil {
 		logger.Fatal(err)
 	}
 }
