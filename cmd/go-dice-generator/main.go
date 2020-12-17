@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -20,6 +21,8 @@ func main() {
 
 	port := flag.Int("port", 8080, "")
 	flag.Parse()
+
+	stats := map[models.Dice]int{}
 
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
@@ -52,6 +55,8 @@ func main() {
 		}
 
 		dice := models.Dice{Tries: tries, Faces: faces}
+		stats[dice]++
+
 		values := generator.GenerateDice(dice)
 		results := models.NewRollResults(values)
 		resultsBytes, err := json.Marshal(results)
@@ -69,6 +74,12 @@ func main() {
 
 		writer.Header().Set("Content-Type", "application/json")
 		writer.Write(resultsBytes)
+	})
+
+	http.HandleFunc("/stats", func(writer http.ResponseWriter, request *http.Request) {
+		logger.Print("received a request at " + request.URL.String())
+
+		fmt.Fprint(writer, stats)
 	})
 
 	address := ":" + strconv.Itoa(*port)
