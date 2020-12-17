@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -22,7 +21,7 @@ func main() {
 	port := flag.Int("port", 8080, "")
 	flag.Parse()
 
-	stats := map[models.Dice]int{}
+	stats := map[string]int{}
 
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
@@ -55,7 +54,7 @@ func main() {
 		}
 
 		dice := models.Dice{Tries: tries, Faces: faces}
-		stats[dice]++
+		stats[dice.String()]++
 
 		values := generator.GenerateDice(dice)
 		results := models.NewRollResults(values)
@@ -79,7 +78,21 @@ func main() {
 	http.HandleFunc("/stats", func(writer http.ResponseWriter, request *http.Request) {
 		logger.Print("received a request at " + request.URL.String())
 
-		fmt.Fprint(writer, stats)
+		statsBytes, err := json.Marshal(stats)
+		if err != nil {
+			httputils.HandleError(
+				writer,
+				logger,
+				http.StatusInternalServerError,
+				"unable to marshal the stats: %v",
+				err,
+			)
+
+			return
+		}
+
+		writer.Header().Set("Content-Type", "application/json")
+		writer.Write(statsBytes)
 	})
 
 	address := ":" + strconv.Itoa(*port)
