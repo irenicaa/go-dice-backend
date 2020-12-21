@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"log"
 	"math/rand"
@@ -62,21 +61,7 @@ func main() {
 
 		values := generator.GenerateDice(dice)
 		results := models.NewRollResults(values)
-		resultsBytes, err := json.Marshal(results)
-		if err != nil {
-			httputils.HandleError(
-				writer,
-				logger,
-				http.StatusInternalServerError,
-				"unable to marshal the roll results: %v",
-				err,
-			)
-
-			return
-		}
-
-		writer.Header().Set("Content-Type", "application/json")
-		writer.Write(resultsBytes)
+		httputils.HandleJSON(writer, logger, results)
 	})
 
 	http.HandleFunc("/stats", func(writer http.ResponseWriter, request *http.Request) {
@@ -89,21 +74,7 @@ func main() {
 		}
 		statsMutex.RUnlock()
 
-		statsBytes, err := json.Marshal(statsCopy)
-		if err != nil {
-			httputils.HandleError(
-				writer,
-				logger,
-				http.StatusInternalServerError,
-				"unable to marshal the stats: %v",
-				err,
-			)
-
-			return
-		}
-
-		writer.Header().Set("Content-Type", "application/json")
-		writer.Write(statsBytes)
+		httputils.HandleJSON(writer, logger, statsCopy)
 	})
 
 	address := ":" + strconv.Itoa(*port)

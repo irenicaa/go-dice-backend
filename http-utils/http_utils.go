@@ -1,6 +1,7 @@
 package httputils
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -51,4 +52,23 @@ func HandleError(
 
 	writer.WriteHeader(status)
 	writer.Write([]byte(message))
+}
+
+// HandleJSON ...
+func HandleJSON(writer http.ResponseWriter, logger Logger, data interface{}) {
+	dataBytes, err := json.Marshal(data)
+	if err != nil {
+		HandleError(
+			writer,
+			logger,
+			http.StatusInternalServerError,
+			"unable to marshal the data: %v",
+			err,
+		)
+
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(dataBytes)
 }
