@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/irenicaa/go-dice-generator/generator"
@@ -21,8 +20,7 @@ func main() {
 	port := flag.Int("port", 8080, "")
 	flag.Parse()
 
-	stats := map[string]int{}
-	statsMutex := sync.RWMutex{}
+	stats := models.NewRollStats()
 
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.HandleFunc("/dice", func(writer http.ResponseWriter, request *http.Request) {
@@ -55,9 +53,7 @@ func main() {
 		}
 
 		dice := models.Dice{Tries: tries, Faces: faces}
-		statsMutex.Lock()
-		stats[dice.String()]++
-		statsMutex.Unlock()
+		stats.Register(dice)
 
 		values := generator.GenerateDice(dice)
 		results := models.NewRollResults(values)
@@ -67,13 +63,7 @@ func main() {
 	http.HandleFunc("/stats", func(writer http.ResponseWriter, request *http.Request) {
 		logger.Print("received a request at " + request.URL.String())
 
-		statsCopy := map[string]int{}
-		statsMutex.RLock()
-		for dice, count := range stats {
-			statsCopy[dice] = count
-		}
-		statsMutex.RUnlock()
-
+		statsCopy := stats.CopyData()
 		httputils.HandleJSON(writer, logger, statsCopy)
 	})
 
