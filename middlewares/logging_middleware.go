@@ -1,7 +1,9 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
 )
@@ -15,8 +17,11 @@ func LoggingMiddleware(
 		writer http.ResponseWriter,
 		request *http.Request,
 	) {
-		logger.Print("received a request at " + request.URL.String())
-
+		startTime := time.Now()
 		handler.ServeHTTP(writer, request)
+
+		elapsedTime := time.Now().Sub(startTime)
+		message := fmt.Sprintf("%s %s %s", request.Method, request.URL, elapsedTime)
+		logger.Print(message)
 	})
 }
