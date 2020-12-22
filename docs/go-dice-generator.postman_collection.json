@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "e87d6ab3-fe75-423d-90a3-03c396ab7635",
+		"name": "go-dice-generator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/dice",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function randomParameter(minimum, maximum) {",
+							"  const value = Math.random() * (maximum - minimum) + minimum;",
+							"  return value.toFixed();",
+							"}",
+							"",
+							"pm.environment.set(\"tries\", randomParameter(1, 100));",
+							"pm.environment.set(\"faces\", randomParameter(2, 100));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/dice?tries={{tries}}&faces={{faces}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"dice"
+					],
+					"query": [
+						{
+							"key": "tries",
+							"value": "{{tries}}"
+						},
+						{
+							"key": "faces",
+							"value": "{{faces}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/stats",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"stats"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
