@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/irenicaa/go-dice-generator/handlers"
-	httputils "github.com/irenicaa/go-dice-generator/http-utils"
 	"github.com/irenicaa/go-dice-generator/models"
 )
 
@@ -21,16 +20,9 @@ func main() {
 	flag.Parse()
 
 	stats := models.NewRollStats()
-
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.Handle("/dice", handlers.DiceHandler{Stats: stats, Logger: logger})
-
-	http.HandleFunc("/stats", func(writer http.ResponseWriter, request *http.Request) {
-		logger.Print("received a request at " + request.URL.String())
-
-		statsCopy := stats.CopyData()
-		httputils.HandleJSON(writer, logger, statsCopy)
-	})
+	http.Handle("/stats", handlers.StatsHandler{Stats: stats, Logger: logger})
 
 	address := ":" + strconv.Itoa(*port)
 	if err := http.ListenAndServe(address, nil); err != nil {
