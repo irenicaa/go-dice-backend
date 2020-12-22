@@ -18,8 +18,6 @@ func (diceHandler DiceHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	diceHandler.Logger.Print("received a request at " + request.URL.String())
-
 	tries, err := httputils.GetIntFormValue(request, "tries", 1, 100)
 	if err != nil {
 		httputils.HandleError(

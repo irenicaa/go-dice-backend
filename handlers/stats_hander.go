@@ -18,8 +18,6 @@ func (statsHandler StatsHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	statsHandler.Logger.Print("received a request at " + request.URL.String())
-
 	statsCopy := statsHandler.Stats.CopyData()
 	httputils.HandleJSON(writer, statsHandler.Logger, statsCopy)
 }
