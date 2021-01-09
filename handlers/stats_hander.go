@@ -14,6 +14,10 @@ type StatsHandler struct {
 }
 
 // ServeHTTP ...
+//   @router /stats [GET]
+//   @summary get stats of dice rolls
+//   @produce json
+//   @success 200 {object} map[string]int
 func (statsHandler StatsHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
