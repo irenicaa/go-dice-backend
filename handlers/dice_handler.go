@@ -14,6 +14,14 @@ type DiceHandler struct {
 	Logger httputils.Logger
 }
 
+// ServeHTTP ...
+//   @router /dice [GET]
+//   @summary generate dice rolls
+//   @param tries query integer true "amount of roll tries"
+//   @param faces query integer true "amount of dice faces"
+//   @produce json
+//   @success 200 {object} models.RollResults
+//   @failure 400 {string} string
 func (diceHandler DiceHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
