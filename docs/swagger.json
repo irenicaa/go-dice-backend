@@ -1,0 +1,93 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "go-dice-generator API",
+        "contact": {},
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/dice": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "generate dice rolls",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "amount of roll tries",
+                        "name": "tries",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "amount of dice faces",
+                        "name": "faces",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.RollResults"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/stats": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get stats of dice rolls",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.RollResults": {
+            "type": "object",
+            "properties": {
+                "Max": {
+                    "type": "integer"
+                },
+                "Min": {
+                    "type": "integer"
+                },
+                "Sum": {
+                    "type": "integer"
+                },
+                "Values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}

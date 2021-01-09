@@ -1,0 +1,60 @@
+definitions:
+  models.RollResults:
+    properties:
+      Max:
+        type: integer
+      Min:
+        type: integer
+      Sum:
+        type: integer
+      Values:
+        items:
+          type: integer
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  license:
+    name: MIT
+  title: go-dice-generator API
+  version: 1.0.0
+paths:
+  /dice:
+    get:
+      parameters:
+      - description: amount of roll tries
+        in: query
+        name: tries
+        required: true
+        type: integer
+      - description: amount of dice faces
+        in: query
+        name: faces
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RollResults'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: generate dice rolls
+  /stats:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      summary: get stats of dice rolls
+swagger: "2.0"
