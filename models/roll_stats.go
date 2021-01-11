@@ -2,10 +2,18 @@ package models
 
 import "sync"
 
+// Locker ...
+type Locker interface {
+	Lock()
+	Unlock()
+	RLock()
+	RUnlock()
+}
+
 // RollStats ...
 type RollStats struct {
 	data  map[string]int
-	mutex *sync.RWMutex
+	mutex Locker
 }
 
 // NewRollStats ...
