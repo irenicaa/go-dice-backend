@@ -4,12 +4,16 @@ import (
 	"net/http"
 
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
-	"github.com/irenicaa/go-dice-generator/models"
 )
+
+// StatsCopier ...
+type StatsCopier interface {
+	CopyData() map[string]int
+}
 
 // StatsHandler ...
 type StatsHandler struct {
-	Stats  models.RollStats
+	Stats  StatsCopier
 	Logger httputils.Logger
 }
 
