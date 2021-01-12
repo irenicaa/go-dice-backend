@@ -8,9 +8,14 @@ import (
 	"github.com/irenicaa/go-dice-generator/models"
 )
 
+// StatsRegister ...
+type StatsRegister interface {
+	Register(dice models.Dice)
+}
+
 // DiceHandler ...
 type DiceHandler struct {
-	Stats  models.RollStats
+	Stats  StatsRegister
 	Logger httputils.Logger
 }
 
