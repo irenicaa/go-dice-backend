@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"bytes"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
@@ -24,7 +27,40 @@ func TestStatsHandler_ServeHTTP(t *testing.T) {
 		args         args
 		wantResponse *http.Response
 	}{
-		// TODO: Add test cases.
+		{
+			name: "success",
+			fields: fields{
+				Stats: func() StatsCopier {
+					data := map[string]int{"2d3": 5, "4d2": 12}
+
+					stats := &MockStatsCopier{}
+					stats.InnerMock.On("CopyData").Return(data)
+
+					return stats
+				}(),
+				Logger: &MockLogger{},
+			},
+			args: args{
+				request: httptest.NewRequest(
+					http.MethodGet,
+					"http://example.com/stats",
+					nil,
+				),
+			},
+			wantResponse: &http.Response{
+				Status: strconv.Itoa(http.StatusOK) + " " +
+					http.StatusText(http.StatusOK),
+				StatusCode: http.StatusOK,
+				Proto:      "HTTP/1.1",
+				ProtoMajor: 1,
+				ProtoMinor: 1,
+				Header:     http.Header{"Content-Type": []string{"application/json"}},
+				Body: ioutil.NopCloser(bytes.NewReader(
+					[]byte(`{"2d3":5,"4d2":12}`),
+				)),
+				ContentLength: -1,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
