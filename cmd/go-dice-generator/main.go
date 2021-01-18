@@ -25,10 +25,12 @@ func main() {
 	http.Handle("/dice", middlewares.LoggingMiddleware(
 		handlers.DiceHandler{Stats: stats, Logger: logger},
 		logger,
+		time.Now,
 	))
 	http.Handle("/stats", middlewares.LoggingMiddleware(
 		handlers.StatsHandler{Stats: stats, Logger: logger},
 		logger,
+		time.Now,
 	))
 
 	address := ":" + strconv.Itoa(*port)
