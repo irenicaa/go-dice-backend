@@ -41,13 +41,26 @@ func TestDiceGenerator(t *testing.T) {
 	}
 
 	url := fmt.Sprintf("http://localhost:%d/stats", *port)
-	response, err := http.Get(url)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, response.StatusCode)
-
-	var gotStats map[string]int
-	err = json.NewDecoder(response.Body).Decode(&gotStats)
+	gotStats, err := loadStats(url)
 	require.NoError(t, err)
 
 	assert.Equal(t, stats.CopyData(), gotStats)
+}
+
+func loadStats(url string) (map[string]int, error) {
+	response, err := http.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("unable to send the request: %v", err)
+	}
+	if response.StatusCode != http.StatusOK {
+		return nil,
+			fmt.Errorf("request was failed with the status %d", response.StatusCode)
+	}
+
+	var stats map[string]int
+	if err := json.NewDecoder(response.Body).Decode(&stats); err != nil {
+		return nil, fmt.Errorf("unable to decode the stats: %v", err)
+	}
+
+	return stats, nil
 }
