@@ -23,11 +23,16 @@ func TestDiceGenerator(t *testing.T) {
 	requestCount := flag.Int("count", 10, "")
 	flag.Parse()
 
-	stats := models.NewRollStats()
+	statsURL := fmt.Sprintf("http://localhost:%d/stats", *port)
+	stats, err := loadStats(statsURL)
+	require.NoError(t, err)
+
 	for i := 0; i < *requestCount; i++ {
 		tries := rand.Intn(100) + 1
 		faces := rand.Intn(99) + 2
-		stats.Register(models.Dice{Tries: tries, Faces: faces})
+
+		dice := models.Dice{Tries: tries, Faces: faces}
+		stats[dice.String()]++
 
 		url := fmt.Sprintf(
 			"http://localhost:%d/dice?tries=%d&faces=%d",
@@ -40,11 +45,10 @@ func TestDiceGenerator(t *testing.T) {
 		require.Equal(t, http.StatusOK, response.StatusCode)
 	}
 
-	url := fmt.Sprintf("http://localhost:%d/stats", *port)
-	gotStats, err := loadStats(url)
+	gotStats, err := loadStats(statsURL)
 	require.NoError(t, err)
 
-	assert.Equal(t, stats.CopyData(), gotStats)
+	assert.Equal(t, stats, gotStats)
 }
 
 func loadStats(url string) (map[string]int, error) {
