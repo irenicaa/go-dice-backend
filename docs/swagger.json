@@ -18,6 +18,8 @@
                 "summary": "generate dice rolls",
                 "parameters": [
                     {
+                        "maximum": 100,
+                        "minimum": 1,
                         "type": "integer",
                         "description": "amount of roll tries",
                         "name": "tries",
@@ -25,6 +27,8 @@
                         "required": true
                     },
                     {
+                        "maximum": 100,
+                        "minimum": 2,
                         "type": "integer",
                         "description": "amount of dice faces",
                         "name": "faces",

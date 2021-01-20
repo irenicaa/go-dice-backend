@@ -22,8 +22,8 @@ type DiceHandler struct {
 // ServeHTTP ...
 //   @router /dice [GET]
 //   @summary generate dice rolls
-//   @param tries query integer true "amount of roll tries"
-//   @param faces query integer true "amount of dice faces"
+//   @param tries query integer true "amount of roll tries" minimum(1) maximum(100)
+//   @param faces query integer true "amount of dice faces" minimum(2) maximum(100)
 //   @produce json
 //   @success 200 {object} models.RollResults
 //   @failure 400 {string} string

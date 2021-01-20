@@ -25,11 +25,15 @@ paths:
       parameters:
       - description: amount of roll tries
         in: query
+        maximum: 100
+        minimum: 1
         name: tries
         required: true
         type: integer
       - description: amount of dice faces
         in: query
+        maximum: 100
+        minimum: 2
         name: faces
         required: true
         type: integer
