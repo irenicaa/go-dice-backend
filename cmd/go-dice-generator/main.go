@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/irenicaa/go-dice-generator/handlers"
@@ -17,7 +16,6 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	port := flag.Int("port", 8080, "")
 	flag.Parse()
 
 	stats := models.NewRollStats()
@@ -33,7 +31,11 @@ func main() {
 		time.Now,
 	))
 
-	address := ":" + strconv.Itoa(*port)
+	port, ok := os.LookupEnv("PORT")
+	if !ok {
+		port = "8080"
+	}
+	address := ":" + port
 	if err := http.ListenAndServe(address, nil); err != nil {
 		logger.Fatal(err)
 	}
