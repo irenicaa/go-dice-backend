@@ -16,12 +16,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var port = flag.Int("port", 8080, "server port")
+var requestCount = flag.Int("requestCount", 10, "test request count")
+
 func TestDiceGenerator(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-
-	port := flag.Int("port", 8080, "")
-	requestCount := flag.Int("count", 10, "")
-	flag.Parse()
 
 	statsURL := fmt.Sprintf("http://localhost:%d/stats", *port)
 	stats, err := loadStats(statsURL)
