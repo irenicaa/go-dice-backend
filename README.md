@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/irenicaa/go-dice-generator?status.svg)](https://godoc.org/github.com/irenicaa/go-dice-generator)
 [![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/go-dice-generator)](https://goreportcard.com/report/github.com/irenicaa/go-dice-generator)
-[![Build Status](https://travis-ci.org/irenicaa/go-dice-generator.svg?branch=master)](https://travis-ci.org/irenicaa/go-dice-generator)
+[![Build Status](https://app.travis-ci.com/irenicaa/go-dice-generator.svg?branch=master)](https://app.travis-ci.com/irenicaa/go-dice-generator)
 [![codecov](https://codecov.io/gh/irenicaa/go-dice-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/go-dice-generator)
 
 The web service that implements dice rolling.
