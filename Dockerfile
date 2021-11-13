@@ -1,4 +1,4 @@
-FROM golang:1.11.13 AS builder
+FROM golang:1.15.10 AS builder
 WORKDIR /go/src/github.com/irenicaa/go-dice-generator
 COPY . .
 RUN CGO_ENABLED=0 go install -v ./...

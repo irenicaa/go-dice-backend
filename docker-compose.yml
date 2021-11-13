@@ -6,7 +6,7 @@ services:
       - 8080:8080
 
   swagger:
-    image: swaggerapi/swagger-ui:v3.39.0
+    image: swaggerapi/swagger-ui:v3.52.5
     environment:
       SWAGGER_JSON: /etc/go-dice-generator/swagger.json
     ports:
