@@ -27,6 +27,21 @@ Environment variables:
 
 - `PORT` &mdash; server port (default: `8080`).
 
+## Testing
+
+Running of the unit tests:
+
+```
+$ go test -race -cover ./...
+```
+
+Running of the integration tests:
+
+```
+$ docker-compose up -d
+$ go test -race -cover -tags integration ./...
+```
+
 ## Docs
 
 - [swagger.yaml](docs/swagger.yaml) &mdash; Swagger definition of the server API
