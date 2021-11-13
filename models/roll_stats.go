@@ -2,10 +2,9 @@ package models
 
 import "sync"
 
-// Locker ...
-type Locker interface {
-	Lock()
-	Unlock()
+type locker interface {
+	sync.Locker
+
 	RLock()
 	RUnlock()
 }
@@ -13,7 +12,7 @@ type Locker interface {
 // RollStats ...
 type RollStats struct {
 	data  map[string]int
-	mutex Locker
+	mutex locker
 }
 
 // NewRollStats ...

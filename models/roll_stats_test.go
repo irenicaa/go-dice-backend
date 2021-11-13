@@ -17,7 +17,7 @@ func TestNewRollStats(t *testing.T) {
 func TestRollStats_Register(t *testing.T) {
 	type fields struct {
 		data  map[string]int
-		mutex Locker
+		mutex locker
 	}
 	type args struct {
 		dice Dice
@@ -33,7 +33,7 @@ func TestRollStats_Register(t *testing.T) {
 			name: "existing key",
 			fields: fields{
 				data: map[string]int{"2d3": 5, "4d2": 12},
-				mutex: func() Locker {
+				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
 					locker.InnerMock.On("Unlock").Return()
@@ -50,7 +50,7 @@ func TestRollStats_Register(t *testing.T) {
 			name: "not existing key",
 			fields: fields{
 				data: map[string]int{"2d3": 5, "4d2": 12},
-				mutex: func() Locker {
+				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
 					locker.InnerMock.On("Unlock").Return()
@@ -81,7 +81,7 @@ func TestRollStats_Register(t *testing.T) {
 func TestRollStats_CopyData(t *testing.T) {
 	type fields struct {
 		data  map[string]int
-		mutex Locker
+		mutex locker
 	}
 
 	tests := []struct {
@@ -93,7 +93,7 @@ func TestRollStats_CopyData(t *testing.T) {
 			name: "success",
 			fields: fields{
 				data: map[string]int{"2d3": 5, "4d2": 12},
-				mutex: func() Locker {
+				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("RLock").Return()
 					locker.InnerMock.On("RUnlock").Return()
