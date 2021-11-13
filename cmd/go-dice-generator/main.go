@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/irenicaa/go-dice-generator/handlers"
-	"github.com/irenicaa/go-dice-generator/middlewares"
+	httputils "github.com/irenicaa/go-dice-generator/http-utils"
 	"github.com/irenicaa/go-dice-generator/models"
 )
 
@@ -20,12 +20,12 @@ func main() {
 
 	stats := models.NewRollStats()
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
-	http.Handle("/dice", middlewares.LoggingMiddleware(
+	http.Handle("/dice", httputils.LoggingMiddleware(
 		handlers.DiceHandler{Stats: stats, Logger: logger},
 		logger,
 		time.Now,
 	))
-	http.Handle("/stats", middlewares.LoggingMiddleware(
+	http.Handle("/stats", httputils.LoggingMiddleware(
 		handlers.StatsHandler{Stats: stats, Logger: logger},
 		logger,
 		time.Now,

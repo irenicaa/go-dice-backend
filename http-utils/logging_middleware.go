@@ -1,17 +1,15 @@
-package middlewares
+package httputils
 
 import (
 	"fmt"
 	"net/http"
 	"time"
-
-	httputils "github.com/irenicaa/go-dice-generator/http-utils"
 )
 
 // LoggingMiddleware ...
 func LoggingMiddleware(
 	handler http.Handler,
-	logger httputils.Logger,
+	logger Logger,
 	clock func() time.Time,
 ) http.Handler {
 	return http.HandlerFunc(func(
