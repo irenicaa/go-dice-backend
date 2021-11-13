@@ -50,7 +50,7 @@ func TestDiceGenerator(t *testing.T) {
 	assert.Equal(t, stats, gotStats)
 }
 
-func loadStats(url string) (map[string]int, error) {
+func loadStats(url string) (models.RollStatsData, error) {
 	response, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("unable to send the request: %v", err)
@@ -60,7 +60,7 @@ func loadStats(url string) (map[string]int, error) {
 			fmt.Errorf("request was failed with the status %d", response.StatusCode)
 	}
 
-	var stats map[string]int
+	var stats models.RollStatsData
 	if err := json.NewDecoder(response.Body).Decode(&stats); err != nil {
 		return nil, fmt.Errorf("unable to decode the stats: %v", err)
 	}

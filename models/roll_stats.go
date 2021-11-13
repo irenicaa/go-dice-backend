@@ -2,6 +2,9 @@ package models
 
 import "sync"
 
+// RollStatsData ...
+type RollStatsData map[string]int
+
 type locker interface {
 	sync.Locker
 
@@ -11,13 +14,13 @@ type locker interface {
 
 // RollStats ...
 type RollStats struct {
-	data  map[string]int
+	data  RollStatsData
 	mutex locker
 }
 
 // NewRollStats ...
 func NewRollStats() RollStats {
-	return RollStats{data: map[string]int{}, mutex: &sync.RWMutex{}}
+	return RollStats{data: RollStatsData{}, mutex: &sync.RWMutex{}}
 }
 
 // Register ...
@@ -29,11 +32,11 @@ func (rollStats RollStats) Register(dice Dice) {
 }
 
 // CopyData ...
-func (rollStats RollStats) CopyData() map[string]int {
+func (rollStats RollStats) CopyData() RollStatsData {
 	rollStats.mutex.RLock()
 	defer rollStats.mutex.RUnlock()
 
-	dataCopy := map[string]int{}
+	dataCopy := RollStatsData{}
 	for dice, count := range rollStats.data {
 		dataCopy[dice] = count
 	}

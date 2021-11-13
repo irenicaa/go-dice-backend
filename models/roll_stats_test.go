@@ -10,13 +10,13 @@ import (
 func TestNewRollStats(t *testing.T) {
 	rollStats := NewRollStats()
 
-	assert.Equal(t, map[string]int{}, rollStats.data)
+	assert.Equal(t, RollStatsData{}, rollStats.data)
 	assert.Equal(t, &sync.RWMutex{}, rollStats.mutex)
 }
 
 func TestRollStats_Register(t *testing.T) {
 	type fields struct {
-		data  map[string]int
+		data  RollStatsData
 		mutex locker
 	}
 	type args struct {
@@ -27,12 +27,12 @@ func TestRollStats_Register(t *testing.T) {
 		name     string
 		fields   fields
 		args     args
-		wantData map[string]int
+		wantData RollStatsData
 	}{
 		{
 			name: "existing key",
 			fields: fields{
-				data: map[string]int{"2d3": 5, "4d2": 12},
+				data: RollStatsData{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
@@ -44,12 +44,12 @@ func TestRollStats_Register(t *testing.T) {
 			args: args{
 				dice: Dice{Tries: 4, Faces: 2},
 			},
-			wantData: map[string]int{"2d3": 5, "4d2": 13},
+			wantData: RollStatsData{"2d3": 5, "4d2": 13},
 		},
 		{
 			name: "not existing key",
 			fields: fields{
-				data: map[string]int{"2d3": 5, "4d2": 12},
+				data: RollStatsData{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
@@ -61,7 +61,7 @@ func TestRollStats_Register(t *testing.T) {
 			args: args{
 				dice: Dice{Tries: 10, Faces: 100},
 			},
-			wantData: map[string]int{"2d3": 5, "4d2": 12, "10d100": 1},
+			wantData: RollStatsData{"2d3": 5, "4d2": 12, "10d100": 1},
 		},
 	}
 	for _, tt := range tests {
@@ -80,19 +80,19 @@ func TestRollStats_Register(t *testing.T) {
 
 func TestRollStats_CopyData(t *testing.T) {
 	type fields struct {
-		data  map[string]int
+		data  RollStatsData
 		mutex locker
 	}
 
 	tests := []struct {
 		name   string
 		fields fields
-		want   map[string]int
+		want   RollStatsData
 	}{
 		{
 			name: "success",
 			fields: fields{
-				data: map[string]int{"2d3": 5, "4d2": 12},
+				data: RollStatsData{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("RLock").Return()
@@ -101,7 +101,7 @@ func TestRollStats_CopyData(t *testing.T) {
 					return locker
 				}(),
 			},
-			want: map[string]int{"2d3": 5, "4d2": 12},
+			want: RollStatsData{"2d3": 5, "4d2": 12},
 		},
 	}
 	for _, tt := range tests {

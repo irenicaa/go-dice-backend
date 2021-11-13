@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
+	"github.com/irenicaa/go-dice-generator/models"
 )
 
 // StatsCopier ...
 type StatsCopier interface {
-	CopyData() map[string]int
+	CopyData() models.RollStatsData
 }
 
 // StatsHandler ...
@@ -21,7 +22,7 @@ type StatsHandler struct {
 //   @router /stats [GET]
 //   @summary get stats of dice rolls
 //   @produce json
-//   @success 200 {object} map[string]int
+//   @success 200 {object} models.RollStatsData
 func (statsHandler StatsHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	httputils "github.com/irenicaa/go-dice-generator/http-utils"
+	"github.com/irenicaa/go-dice-generator/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,7 +32,7 @@ func TestStatsHandler_ServeHTTP(t *testing.T) {
 			name: "success",
 			fields: fields{
 				Stats: func() StatsCopier {
-					data := map[string]int{"2d3": 5, "4d2": 12}
+					data := models.RollStatsData{"2d3": 5, "4d2": 12}
 
 					stats := &MockStatsCopier{}
 					stats.InnerMock.On("CopyData").Return(data)
