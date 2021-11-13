@@ -16,6 +16,10 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
+	port, ok := os.LookupEnv("PORT")
+	if !ok {
+		port = "8080"
+	}
 	flag.Parse()
 
 	stats := models.NewRollStats()
@@ -31,12 +35,7 @@ func main() {
 		time.Now,
 	))
 
-	port, ok := os.LookupEnv("PORT")
-	if !ok {
-		port = "8080"
-	}
-	address := ":" + port
-	if err := http.ListenAndServe(address, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		logger.Fatal(err)
 	}
 }
