@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "go-dice-generator API",
+        "title": "go-dice-backend API",
         "contact": {},
         "license": {
             "name": "MIT"

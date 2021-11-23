@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/irenicaa/go-dice-generator/models"
+	"github.com/irenicaa/go-dice-backend/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -19,7 +19,7 @@ import (
 var port = flag.Int("port", 8080, "server port")
 var requestCount = flag.Int("requestCount", 10, "test request count")
 
-func TestDiceGenerator(t *testing.T) {
+func TestDiceBackend(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
 	statsURL := fmt.Sprintf("http://localhost:%d/stats", *port)

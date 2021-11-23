@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
-	httputils "github.com/irenicaa/go-dice-generator/http-utils"
-	"github.com/irenicaa/go-dice-generator/models"
+	httputils "github.com/irenicaa/go-dice-backend/http-utils"
+	"github.com/irenicaa/go-dice-backend/models"
 	"github.com/stretchr/testify/assert"
 )
 

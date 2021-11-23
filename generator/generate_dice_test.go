@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/irenicaa/go-dice-generator/models"
+	"github.com/irenicaa/go-dice-backend/models"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,22 +1,22 @@
-# go-dice-generator
+# go-dice-backend
 
-[![GoDoc](https://godoc.org/github.com/irenicaa/go-dice-generator?status.svg)](https://godoc.org/github.com/irenicaa/go-dice-generator)
-[![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/go-dice-generator)](https://goreportcard.com/report/github.com/irenicaa/go-dice-generator)
-[![Build Status](https://app.travis-ci.com/irenicaa/go-dice-generator.svg?branch=master)](https://app.travis-ci.com/irenicaa/go-dice-generator)
-[![codecov](https://codecov.io/gh/irenicaa/go-dice-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/go-dice-generator)
+[![GoDoc](https://godoc.org/github.com/irenicaa/go-dice-backend?status.svg)](https://godoc.org/github.com/irenicaa/go-dice-backend)
+[![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/go-dice-backend)](https://goreportcard.com/report/github.com/irenicaa/go-dice-backend)
+[![Build Status](https://app.travis-ci.com/irenicaa/go-dice-backend.svg?branch=master)](https://app.travis-ci.com/irenicaa/go-dice-backend)
+[![codecov](https://codecov.io/gh/irenicaa/go-dice-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/go-dice-backend)
 
 The web service that implements dice rolling.
 
 ## Installation
 
 ```
-$ go get github.com/irenicaa/go-dice-generator/...
+$ go get github.com/irenicaa/go-dice-backend/...
 ```
 
 ## Usage
 
 ```
-$ go-dice-generator -h | -help | --help
+$ go-dice-backend -h | -help | --help
 ```
 
 Options:

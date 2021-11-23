@@ -1,4 +1,4 @@
-module github.com/irenicaa/go-dice-generator
+module github.com/irenicaa/go-dice-backend
 
 go 1.15
 

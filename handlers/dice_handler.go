@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/irenicaa/go-dice-generator/generator"
-	httputils "github.com/irenicaa/go-dice-generator/http-utils"
-	"github.com/irenicaa/go-dice-generator/models"
+	"github.com/irenicaa/go-dice-backend/generator"
+	httputils "github.com/irenicaa/go-dice-backend/http-utils"
+	"github.com/irenicaa/go-dice-backend/models"
 )
 
 // StatsRegister ...

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "e87d6ab3-fe75-423d-90a3-03c396ab7635",
-		"name": "go-dice-generator",
+		"name": "go-dice-backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
