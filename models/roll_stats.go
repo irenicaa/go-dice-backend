@@ -23,14 +23,6 @@ func NewRollStats() RollStats {
 	return RollStats{data: RollStatsData{}, mutex: &sync.RWMutex{}}
 }
 
-// RegisterDice ...
-func (rollStats RollStats) RegisterDice(dice Dice) {
-	rollStats.mutex.Lock()
-	defer rollStats.mutex.Unlock()
-
-	rollStats.data[dice.String()]++
-}
-
 // CopyRollStats ...
 func (rollStats RollStats) CopyRollStats() RollStatsData {
 	rollStats.mutex.RLock()
@@ -42,4 +34,12 @@ func (rollStats RollStats) CopyRollStats() RollStatsData {
 	}
 
 	return dataCopy
+}
+
+// RegisterDice ...
+func (rollStats RollStats) RegisterDice(dice Dice) {
+	rollStats.mutex.Lock()
+	defer rollStats.mutex.Unlock()
+
+	rollStats.data[dice.String()]++
 }
