@@ -78,7 +78,7 @@ func TestRollStats_RegisterDice(t *testing.T) {
 	}
 }
 
-func TestRollStats_CopyData(t *testing.T) {
+func TestRollStats_CopyRollStats(t *testing.T) {
 	type fields struct {
 		data  RollStatsData
 		mutex locker
@@ -110,7 +110,7 @@ func TestRollStats_CopyData(t *testing.T) {
 				data:  tt.fields.data,
 				mutex: tt.fields.mutex,
 			}
-			got := rollStats.CopyData()
+			got := rollStats.CopyRollStats()
 			rollStats.data["10d100"] = 23
 
 			tt.fields.mutex.(*MockLocker).InnerMock.AssertExpectations(t)

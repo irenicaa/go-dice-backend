@@ -31,8 +31,8 @@ func (rollStats RollStats) RegisterDice(dice Dice) {
 	rollStats.data[dice.String()]++
 }
 
-// CopyData ...
-func (rollStats RollStats) CopyData() RollStatsData {
+// CopyRollStats ...
+func (rollStats RollStats) CopyRollStats() RollStatsData {
 	rollStats.mutex.RLock()
 	defer rollStats.mutex.RUnlock()
 

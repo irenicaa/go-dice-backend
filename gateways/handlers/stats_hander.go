@@ -9,7 +9,7 @@ import (
 
 // StatsCopier ...
 type StatsCopier interface {
-	CopyData() models.RollStatsData
+	CopyRollStats() models.RollStatsData
 }
 
 // StatsHandler ...
@@ -27,6 +27,6 @@ func (statsHandler StatsHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	statsCopy := statsHandler.Stats.CopyData()
+	statsCopy := statsHandler.Stats.CopyRollStats()
 	httputils.HandleJSON(writer, statsHandler.Logger, statsCopy)
 }
