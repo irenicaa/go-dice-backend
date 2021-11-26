@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/irenicaa/go-dice-backend/handlers"
+	"github.com/irenicaa/go-dice-backend/gateways/handlers"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
 )
