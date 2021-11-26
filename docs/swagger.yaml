@@ -12,7 +12,7 @@ definitions:
           type: integer
         type: array
     type: object
-  models.RollStatsData:
+  models.RollStats:
     additionalProperties:
       type: integer
     type: object
@@ -61,6 +61,6 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.RollStatsData'
+            $ref: '#/definitions/models.RollStats'
       summary: get stats of dice rolls
 swagger: "2.0"

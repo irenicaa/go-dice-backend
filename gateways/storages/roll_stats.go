@@ -15,21 +15,21 @@ type locker interface {
 
 // RollStats ...
 type RollStats struct {
-	data  models.RollStatsData
+	data  models.RollStats
 	mutex locker
 }
 
 // NewRollStats ...
 func NewRollStats() RollStats {
-	return RollStats{data: models.RollStatsData{}, mutex: &sync.RWMutex{}}
+	return RollStats{data: models.RollStats{}, mutex: &sync.RWMutex{}}
 }
 
 // CopyRollStats ...
-func (rollStats RollStats) CopyRollStats() models.RollStatsData {
+func (rollStats RollStats) CopyRollStats() models.RollStats {
 	rollStats.mutex.RLock()
 	defer rollStats.mutex.RUnlock()
 
-	dataCopy := models.RollStatsData{}
+	dataCopy := models.RollStats{}
 	for dice, count := range rollStats.data {
 		dataCopy[dice] = count
 	}

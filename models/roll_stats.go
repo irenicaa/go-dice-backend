@@ -1,4 +1,4 @@
 package models
 
-// RollStatsData ...
-type RollStatsData map[string]int
+// RollStats ...
+type RollStats map[string]int

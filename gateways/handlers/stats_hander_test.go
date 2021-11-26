@@ -32,7 +32,7 @@ func TestStatsHandler_ServeHTTP(t *testing.T) {
 			name: "success",
 			fields: fields{
 				Stats: func() StatsCopier {
-					data := models.RollStatsData{"2d3": 5, "4d2": 12}
+					data := models.RollStats{"2d3": 5, "4d2": 12}
 
 					stats := &MockStatsCopier{}
 					stats.InnerMock.On("CopyRollStats").Return(data)

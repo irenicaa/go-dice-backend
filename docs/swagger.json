@@ -62,7 +62,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.RollStatsData"
+                            "$ref": "#/definitions/models.RollStats"
                         }
                     }
                 }
@@ -90,7 +90,7 @@
                 }
             }
         },
-        "models.RollStatsData": {
+        "models.RollStats": {
             "type": "object",
             "additionalProperties": {
                 "type": "integer"

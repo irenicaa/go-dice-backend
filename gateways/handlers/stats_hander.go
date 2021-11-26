@@ -9,7 +9,7 @@ import (
 
 // StatsCopier ...
 type StatsCopier interface {
-	CopyRollStats() models.RollStatsData
+	CopyRollStats() models.RollStats
 }
 
 // StatsHandler ...
@@ -22,7 +22,7 @@ type StatsHandler struct {
 //   @router /stats [GET]
 //   @summary get stats of dice rolls
 //   @produce json
-//   @success 200 {object} models.RollStatsData
+//   @success 200 {object} models.RollStats
 func (statsHandler StatsHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,

@@ -50,7 +50,7 @@ func TestDiceBackend(t *testing.T) {
 	assert.Equal(t, stats, gotStats)
 }
 
-func loadStats(url string) (models.RollStatsData, error) {
+func loadStats(url string) (models.RollStats, error) {
 	response, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("unable to send the request: %v", err)
@@ -60,7 +60,7 @@ func loadStats(url string) (models.RollStatsData, error) {
 			fmt.Errorf("request was failed with the status %d", response.StatusCode)
 	}
 
-	var stats models.RollStatsData
+	var stats models.RollStats
 	if err := json.NewDecoder(response.Body).Decode(&stats); err != nil {
 		return nil, fmt.Errorf("unable to decode the stats: %v", err)
 	}

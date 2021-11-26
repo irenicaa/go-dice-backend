@@ -11,25 +11,25 @@ import (
 func TestNewRollStats(t *testing.T) {
 	rollStats := NewRollStats()
 
-	assert.Equal(t, models.RollStatsData{}, rollStats.data)
+	assert.Equal(t, models.RollStats{}, rollStats.data)
 	assert.Equal(t, &sync.RWMutex{}, rollStats.mutex)
 }
 
 func TestRollStats_CopyRollStats(t *testing.T) {
 	type fields struct {
-		data  models.RollStatsData
+		data  models.RollStats
 		mutex locker
 	}
 
 	tests := []struct {
 		name   string
 		fields fields
-		want   models.RollStatsData
+		want   models.RollStats
 	}{
 		{
 			name: "success",
 			fields: fields{
-				data: models.RollStatsData{"2d3": 5, "4d2": 12},
+				data: models.RollStats{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("RLock").Return()
@@ -38,7 +38,7 @@ func TestRollStats_CopyRollStats(t *testing.T) {
 					return locker
 				}(),
 			},
-			want: models.RollStatsData{"2d3": 5, "4d2": 12},
+			want: models.RollStats{"2d3": 5, "4d2": 12},
 		},
 	}
 	for _, tt := range tests {
@@ -58,7 +58,7 @@ func TestRollStats_CopyRollStats(t *testing.T) {
 
 func TestRollStats_RegisterDice(t *testing.T) {
 	type fields struct {
-		data  models.RollStatsData
+		data  models.RollStats
 		mutex locker
 	}
 	type args struct {
@@ -69,12 +69,12 @@ func TestRollStats_RegisterDice(t *testing.T) {
 		name     string
 		fields   fields
 		args     args
-		wantData models.RollStatsData
+		wantData models.RollStats
 	}{
 		{
 			name: "existing key",
 			fields: fields{
-				data: models.RollStatsData{"2d3": 5, "4d2": 12},
+				data: models.RollStats{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
@@ -86,12 +86,12 @@ func TestRollStats_RegisterDice(t *testing.T) {
 			args: args{
 				dice: models.Dice{Tries: 4, Faces: 2},
 			},
-			wantData: models.RollStatsData{"2d3": 5, "4d2": 13},
+			wantData: models.RollStats{"2d3": 5, "4d2": 13},
 		},
 		{
 			name: "not existing key",
 			fields: fields{
-				data: models.RollStatsData{"2d3": 5, "4d2": 12},
+				data: models.RollStats{"2d3": 5, "4d2": 12},
 				mutex: func() locker {
 					locker := &MockLocker{}
 					locker.InnerMock.On("Lock").Return()
@@ -103,7 +103,7 @@ func TestRollStats_RegisterDice(t *testing.T) {
 			args: args{
 				dice: models.Dice{Tries: 10, Faces: 100},
 			},
-			wantData: models.RollStatsData{"2d3": 5, "4d2": 12, "10d100": 1},
+			wantData: models.RollStats{"2d3": 5, "4d2": 12, "10d100": 1},
 		},
 	}
 	for _, tt := range tests {
