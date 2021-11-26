@@ -10,7 +10,7 @@ import (
 
 // StatsRegister ...
 type StatsRegister interface {
-	Register(dice models.Dice)
+	RegisterDice(dice models.Dice)
 }
 
 // DiceHandler ...
@@ -58,7 +58,7 @@ func (diceHandler DiceHandler) ServeHTTP(
 	}
 
 	dice := models.Dice{Tries: tries, Faces: faces}
-	diceHandler.Stats.Register(dice)
+	diceHandler.Stats.RegisterDice(dice)
 
 	values := generator.GenerateDice(dice)
 	results := models.NewRollResults(values)

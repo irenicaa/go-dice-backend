@@ -14,7 +14,7 @@ func TestNewRollStats(t *testing.T) {
 	assert.Equal(t, &sync.RWMutex{}, rollStats.mutex)
 }
 
-func TestRollStats_Register(t *testing.T) {
+func TestRollStats_RegisterDice(t *testing.T) {
 	type fields struct {
 		data  RollStatsData
 		mutex locker
@@ -70,7 +70,7 @@ func TestRollStats_Register(t *testing.T) {
 				data:  tt.fields.data,
 				mutex: tt.fields.mutex,
 			}
-			rollStats.Register(tt.args.dice)
+			rollStats.RegisterDice(tt.args.dice)
 
 			tt.fields.mutex.(*MockLocker).InnerMock.AssertExpectations(t)
 			assert.Equal(t, tt.wantData, rollStats.data)

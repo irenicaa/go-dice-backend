@@ -23,8 +23,8 @@ func NewRollStats() RollStats {
 	return RollStats{data: RollStatsData{}, mutex: &sync.RWMutex{}}
 }
 
-// Register ...
-func (rollStats RollStats) Register(dice Dice) {
+// RegisterDice ...
+func (rollStats RollStats) RegisterDice(dice Dice) {
 	rollStats.mutex.Lock()
 	defer rollStats.mutex.Unlock()
 
