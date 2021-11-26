@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/irenicaa/go-dice-backend/gateways/handlers"
+	"github.com/irenicaa/go-dice-backend/gateways/storages"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
-	"github.com/irenicaa/go-dice-backend/models"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 	flag.Parse()
 
-	stats := models.NewRollStats()
+	stats := storages.NewRollStats()
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
 	http.Handle("/dice", httputils.LoggingMiddleware(
 		handlers.DiceHandler{Stats: stats, Logger: logger},
