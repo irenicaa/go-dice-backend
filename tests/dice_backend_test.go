@@ -22,7 +22,7 @@ var requestCount = flag.Int("requestCount", 10, "test request count")
 func TestDiceBackend(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
-	statsURL := fmt.Sprintf("http://localhost:%d/stats", *port)
+	statsURL := fmt.Sprintf("http://localhost:%d/api/v1/stats", *port)
 	stats, err := loadStats(statsURL)
 	require.NoError(t, err)
 
@@ -34,7 +34,7 @@ func TestDiceBackend(t *testing.T) {
 		stats[dice.String()]++
 
 		url := fmt.Sprintf(
-			"http://localhost:%d/dice?tries=%d&faces=%d",
+			"http://localhost:%d/api/v1/dice?tries=%d&faces=%d",
 			*port,
 			tries,
 			faces,

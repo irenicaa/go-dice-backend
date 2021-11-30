@@ -24,12 +24,12 @@ func main() {
 
 	stats := storages.NewRollStats()
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
-	http.Handle("/dice", httputils.LoggingMiddleware(
+	http.Handle("/api/v1/dice", httputils.LoggingMiddleware(
 		handlers.DiceHandler{Stats: stats, Logger: logger},
 		logger,
 		time.Now,
 	))
-	http.Handle("/stats", httputils.LoggingMiddleware(
+	http.Handle("/api/v1/stats", httputils.LoggingMiddleware(
 		handlers.StatsHandler{Stats: stats, Logger: logger},
 		logger,
 		time.Now,

@@ -45,7 +45,7 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			args: args{
 				request: httptest.NewRequest(
 					http.MethodGet,
-					"http://example.com/dice?tries=2&faces=6",
+					"http://example.com/api/v1/dice?tries=2&faces=6",
 					nil,
 				),
 			},
@@ -83,7 +83,7 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			args: args{
 				request: httptest.NewRequest(
 					http.MethodGet,
-					"http://example.com/dice?tries=incorrect&faces=6",
+					"http://example.com/api/v1/dice?tries=incorrect&faces=6",
 					nil,
 				),
 			},
@@ -122,7 +122,7 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			args: args{
 				request: httptest.NewRequest(
 					http.MethodGet,
-					"http://example.com/dice?tries=2&faces=incorrect",
+					"http://example.com/api/v1/dice?tries=2&faces=incorrect",
 					nil,
 				),
 			},

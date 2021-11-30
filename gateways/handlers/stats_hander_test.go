@@ -44,7 +44,7 @@ func TestStatsHandler_ServeHTTP(t *testing.T) {
 			args: args{
 				request: httptest.NewRequest(
 					http.MethodGet,
-					"http://example.com/stats",
+					"http://example.com/api/v1/stats",
 					nil,
 				),
 			},

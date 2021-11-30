@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "e87d6ab3-fe75-423d-90a3-03c396ab7635",
-		"name": "go-dice-backend",
+		"name": "go-dice-backend API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -28,7 +28,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/dice?tries={{tries}}&faces={{faces}}",
+					"raw": "http://127.0.0.1:8080/api/v1/dice?tries={{tries}}&faces={{faces}}",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -38,6 +38,8 @@
 					],
 					"port": "8080",
 					"path": [
+						"api",
+						"v1",
 						"dice"
 					],
 					"query": [
@@ -60,7 +62,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/stats",
+					"raw": "http://127.0.0.1:8080/api/v1/stats",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -70,6 +72,8 @@
 					],
 					"port": "8080",
 					"path": [
+						"api",
+						"v1",
 						"stats"
 					]
 				}

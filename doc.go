@@ -6,3 +6,4 @@ package dicebackend
 // @version 1.0.0
 // @license.name MIT
 // @host localhost:8080
+// @basePath /api/v1
