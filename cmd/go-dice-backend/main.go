@@ -24,18 +24,17 @@ func main() {
 
 	stats := storages.NewRollStats()
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
-	http.Handle("/api/v1/dice", httputils.LoggingMiddleware(
-		handlers.DiceHandler{Stats: stats, Logger: logger},
+	handler := httputils.LoggingMiddleware(
+		handlers.Router{
+			BaseURL:      "/api/v1",
+			DiceHandler:  handlers.DiceHandler{Stats: stats, Logger: logger},
+			StatsHandler: handlers.StatsHandler{Stats: stats, Logger: logger},
+			Logger:       logger,
+		},
 		logger,
 		time.Now,
-	))
-	http.Handle("/api/v1/stats", httputils.LoggingMiddleware(
-		handlers.StatsHandler{Stats: stats, Logger: logger},
-		logger,
-		time.Now,
-	))
-
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	)
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		logger.Fatal(err)
 	}
 }

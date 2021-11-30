@@ -14,10 +14,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDiceHandler_ServeHTTP(t *testing.T) {
+func TestRouter_ServeHTTP(t *testing.T) {
 	type fields struct {
-		Stats  StatsRegister
-		Logger httputils.Logger
+		BaseURL       string
+		StatsRegister StatsRegister
+		StatsCopier   StatsCopier
+		Logger        httputils.Logger
 	}
 	type args struct {
 		request *http.Request
@@ -30,9 +32,10 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 		wantResponse *http.Response
 	}{
 		{
-			name: "success",
+			name: "success with generating of dice rolls",
 			fields: fields{
-				Stats: func() StatsRegister {
+				BaseURL: "/api/v1",
+				StatsRegister: func() StatsRegister {
 					dice := models.Dice{Tries: 2, Faces: 6}
 
 					stats := &MockStatsRegister{}
@@ -40,7 +43,8 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 
 					return stats
 				}(),
-				Logger: &MockLogger{},
+				StatsCopier: &MockStatsCopier{},
+				Logger:      &MockLogger{},
 			},
 			args: args{
 				request: httptest.NewRequest(
@@ -64,55 +68,51 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			},
 		},
 		{
-			name: "error with the tries parameter",
+			name: "success with getting of stats of dice rolls",
 			fields: fields{
-				Stats: &MockStatsRegister{},
-				Logger: func() httputils.Logger {
-					logger := &MockLogger{}
-					logger.InnerMock.
-						On("Print", []interface{}{
-							"unable to get the tries parameter: value is incorrect: " +
-								"strconv.Atoi: parsing \"incorrect\": invalid syntax",
-						}).
-						Return().
-						Times(1)
+				BaseURL:       "/api/v1",
+				StatsRegister: &MockStatsRegister{},
+				StatsCopier: func() StatsCopier {
+					data := models.RollStats{"2d3": 5, "4d2": 12}
 
-					return logger
+					stats := &MockStatsCopier{}
+					stats.InnerMock.On("CopyRollStats").Return(data)
+
+					return stats
 				}(),
+				Logger: &MockLogger{},
 			},
 			args: args{
 				request: httptest.NewRequest(
-					http.MethodPost,
-					"http://example.com/api/v1/dice?tries=incorrect&faces=6",
+					http.MethodGet,
+					"http://example.com/api/v1/stats",
 					nil,
 				),
 			},
 			wantResponse: &http.Response{
-				Status: strconv.Itoa(http.StatusBadRequest) + " " +
-					http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
+				Status: strconv.Itoa(http.StatusOK) + " " +
+					http.StatusText(http.StatusOK),
+				StatusCode: http.StatusOK,
 				Proto:      "HTTP/1.1",
 				ProtoMajor: 1,
 				ProtoMinor: 1,
-				Header:     http.Header{},
-				Body: ioutil.NopCloser(bytes.NewReader([]byte(
-					"unable to get the tries parameter: value is incorrect: " +
-						"strconv.Atoi: parsing \"incorrect\": invalid syntax",
-				))),
+				Header:     http.Header{"Content-Type": []string{"application/json"}},
+				Body: ioutil.NopCloser(bytes.NewReader(
+					[]byte(`{"2d3":5,"4d2":12}`),
+				)),
 				ContentLength: -1,
 			},
 		},
 		{
-			name: "error with the faces parameter",
+			name: "error",
 			fields: fields{
-				Stats: &MockStatsRegister{},
+				BaseURL:       "/api/v1",
+				StatsRegister: &MockStatsRegister{},
+				StatsCopier:   &MockStatsCopier{},
 				Logger: func() httputils.Logger {
 					logger := &MockLogger{}
 					logger.InnerMock.
-						On("Print", []interface{}{
-							"unable to get the faces parameter: value is incorrect: " +
-								"strconv.Atoi: parsing \"incorrect\": invalid syntax",
-						}).
+						On("Print", []interface{}{http.StatusText(http.StatusNotFound)}).
 						Return().
 						Times(1)
 
@@ -121,22 +121,21 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			},
 			args: args{
 				request: httptest.NewRequest(
-					http.MethodPost,
-					"http://example.com/api/v1/dice?tries=2&faces=incorrect",
+					http.MethodGet,
+					"http://example.com/api/v1/incorrect",
 					nil,
 				),
 			},
 			wantResponse: &http.Response{
-				Status: strconv.Itoa(http.StatusBadRequest) + " " +
-					http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
+				Status: strconv.Itoa(http.StatusNotFound) + " " +
+					http.StatusText(http.StatusNotFound),
+				StatusCode: http.StatusNotFound,
 				Proto:      "HTTP/1.1",
 				ProtoMajor: 1,
 				ProtoMinor: 1,
 				Header:     http.Header{},
 				Body: ioutil.NopCloser(bytes.NewReader([]byte(
-					"unable to get the faces parameter: value is incorrect: " +
-						"strconv.Atoi: parsing \"incorrect\": invalid syntax",
+					http.StatusText(http.StatusNotFound),
 				))),
 				ContentLength: -1,
 			},
@@ -147,13 +146,22 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 			rand.Seed(1)
 
 			responseRecorder := httptest.NewRecorder()
-			diceHandler := DiceHandler{
-				Stats:  tt.fields.Stats,
+			router := Router{
+				BaseURL: tt.fields.BaseURL,
+				DiceHandler: DiceHandler{
+					Stats:  tt.fields.StatsRegister,
+					Logger: tt.fields.Logger,
+				},
+				StatsHandler: StatsHandler{
+					Stats:  tt.fields.StatsCopier,
+					Logger: tt.fields.Logger,
+				},
 				Logger: tt.fields.Logger,
 			}
-			diceHandler.ServeHTTP(responseRecorder, tt.args.request)
+			router.ServeHTTP(responseRecorder, tt.args.request)
 
-			tt.fields.Stats.(*MockStatsRegister).InnerMock.AssertExpectations(t)
+			tt.fields.StatsRegister.(*MockStatsRegister).InnerMock.AssertExpectations(t)
+			tt.fields.StatsCopier.(*MockStatsCopier).InnerMock.AssertExpectations(t)
 			tt.fields.Logger.(*MockLogger).InnerMock.AssertExpectations(t)
 			assert.Equal(t, tt.wantResponse, responseRecorder.Result())
 		})

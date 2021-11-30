@@ -39,7 +39,7 @@ func TestDiceBackend(t *testing.T) {
 			tries,
 			faces,
 		)
-		response, err := http.Get(url)
+		response, err := http.Post(url, "text/plain", nil)
 		require.NoError(t, err)
 		require.Equal(t, http.StatusOK, response.StatusCode)
 	}

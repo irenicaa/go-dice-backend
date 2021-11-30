@@ -33,26 +33,18 @@ func (diceHandler DiceHandler) ServeHTTP(
 ) {
 	tries, err := httputils.GetIntFormValue(request, "tries", 1, 100)
 	if err != nil {
-		httputils.HandleError(
-			writer,
-			diceHandler.Logger,
-			http.StatusBadRequest,
-			"unable to get the tries parameter: %v",
-			err,
-		)
+		status, message :=
+			http.StatusBadRequest, "unable to get the tries parameter: %v"
+		httputils.HandleError(writer, diceHandler.Logger, status, message, err)
 
 		return
 	}
 
 	faces, err := httputils.GetIntFormValue(request, "faces", 2, 100)
 	if err != nil {
-		httputils.HandleError(
-			writer,
-			diceHandler.Logger,
-			http.StatusBadRequest,
-			"unable to get the faces parameter: %v",
-			err,
-		)
+		status, message :=
+			http.StatusBadRequest, "unable to get the faces parameter: %v"
+		httputils.HandleError(writer, diceHandler.Logger, status, message, err)
 
 		return
 	}

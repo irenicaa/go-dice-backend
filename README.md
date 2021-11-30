@@ -51,16 +51,16 @@ $ go test -race -cover -tags integration ./...
 
 ```
 2021/01/22 00:53:32.261794 GET /api/v1/stats 28.706µs
-2021/01/22 00:53:32.262589 GET /api/v1/dice?tries=37&faces=17 57.924µs
-2021/01/22 00:53:32.263880 GET /api/v1/dice?tries=55&faces=88 55.419µs
-2021/01/22 00:53:32.265180 GET /api/v1/dice?tries=19&faces=58 12.94µs
-2021/01/22 00:53:32.266425 GET /api/v1/dice?tries=100&faces=84 56.536µs
-2021/01/22 00:53:32.267702 GET /api/v1/dice?tries=28&faces=84 12.995µs
-2021/01/22 00:53:32.269032 GET /api/v1/dice?tries=42&faces=39 21.617µs
-2021/01/22 00:53:32.270590 GET /api/v1/dice?tries=24&faces=53 62.206µs
-2021/01/22 00:53:32.271839 GET /api/v1/dice?tries=43&faces=65 44.863µs
-2021/01/22 00:53:32.273147 GET /api/v1/dice?tries=23&faces=6 16.589µs
-2021/01/22 00:53:32.274443 GET /api/v1/dice?tries=43&faces=57 13.36µs
+2021/01/22 00:53:32.262589 POST /api/v1/dice?tries=37&faces=17 57.924µs
+2021/01/22 00:53:32.263880 POST /api/v1/dice?tries=55&faces=88 55.419µs
+2021/01/22 00:53:32.265180 POST /api/v1/dice?tries=19&faces=58 12.94µs
+2021/01/22 00:53:32.266425 POST /api/v1/dice?tries=100&faces=84 56.536µs
+2021/01/22 00:53:32.267702 POST /api/v1/dice?tries=28&faces=84 12.995µs
+2021/01/22 00:53:32.269032 POST /api/v1/dice?tries=42&faces=39 21.617µs
+2021/01/22 00:53:32.270590 POST /api/v1/dice?tries=24&faces=53 62.206µs
+2021/01/22 00:53:32.271839 POST /api/v1/dice?tries=43&faces=65 44.863µs
+2021/01/22 00:53:32.273147 POST /api/v1/dice?tries=23&faces=6 16.589µs
+2021/01/22 00:53:32.274443 POST /api/v1/dice?tries=43&faces=57 13.36µs
 2021/01/22 00:53:32.275757 GET /api/v1/stats 66.444µs
 ```
 
