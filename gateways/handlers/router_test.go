@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/irenicaa/go-dice-backend/generator"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
 	"github.com/stretchr/testify/assert"
@@ -19,6 +20,7 @@ func TestRouter_ServeHTTP(t *testing.T) {
 		BaseURL       string
 		StatsRegister StatsRegister
 		StatsCopier   StatsCopier
+		DiceGenerator DiceGenerator
 		Logger        httputils.Logger
 	}
 	type args struct {
@@ -43,8 +45,9 @@ func TestRouter_ServeHTTP(t *testing.T) {
 
 					return stats
 				}(),
-				StatsCopier: &MockStatsCopier{},
-				Logger:      &MockLogger{},
+				StatsCopier:   &MockStatsCopier{},
+				DiceGenerator: generator.GenerateDice,
+				Logger:        &MockLogger{},
 			},
 			args: args{
 				request: httptest.NewRequest(
@@ -80,7 +83,8 @@ func TestRouter_ServeHTTP(t *testing.T) {
 
 					return stats
 				}(),
-				Logger: &MockLogger{},
+				DiceGenerator: nil,
+				Logger:        &MockLogger{},
 			},
 			args: args{
 				request: httptest.NewRequest(
@@ -109,6 +113,7 @@ func TestRouter_ServeHTTP(t *testing.T) {
 				BaseURL:       "/api/v1",
 				StatsRegister: &MockStatsRegister{},
 				StatsCopier:   &MockStatsCopier{},
+				DiceGenerator: nil,
 				Logger: func() httputils.Logger {
 					logger := &MockLogger{}
 					logger.InnerMock.
@@ -149,8 +154,9 @@ func TestRouter_ServeHTTP(t *testing.T) {
 			router := Router{
 				BaseURL: tt.fields.BaseURL,
 				DiceHandler: DiceHandler{
-					Stats:  tt.fields.StatsRegister,
-					Logger: tt.fields.Logger,
+					Stats:         tt.fields.StatsRegister,
+					DiceGenerator: tt.fields.DiceGenerator,
+					Logger:        tt.fields.Logger,
 				},
 				StatsHandler: StatsHandler{
 					Stats:  tt.fields.StatsCopier,

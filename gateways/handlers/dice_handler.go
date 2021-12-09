@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/irenicaa/go-dice-backend/generator"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
 )
@@ -13,10 +12,14 @@ type StatsRegister interface {
 	RegisterDice(dice models.Dice)
 }
 
+// DiceGenerator ...
+type DiceGenerator func(dice models.Dice) []int
+
 // DiceHandler ...
 type DiceHandler struct {
-	Stats  StatsRegister
-	Logger httputils.Logger
+	Stats         StatsRegister
+	DiceGenerator DiceGenerator
+	Logger        httputils.Logger
 }
 
 // ServeHTTP ...
@@ -52,7 +55,7 @@ func (diceHandler DiceHandler) ServeHTTP(
 	dice := models.Dice{Tries: tries, Faces: faces}
 	diceHandler.Stats.RegisterDice(dice)
 
-	values := generator.GenerateDice(dice)
+	values := diceHandler.DiceGenerator(dice)
 	results := models.NewRollResults(values)
 	httputils.HandleJSON(writer, diceHandler.Logger, results)
 }

@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/irenicaa/go-dice-backend/generator"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
 	"github.com/stretchr/testify/assert"
@@ -16,8 +17,9 @@ import (
 
 func TestDiceHandler_ServeHTTP(t *testing.T) {
 	type fields struct {
-		Stats  StatsRegister
-		Logger httputils.Logger
+		Stats         StatsRegister
+		DiceGenerator DiceGenerator
+		Logger        httputils.Logger
 	}
 	type args struct {
 		request *http.Request
@@ -40,7 +42,8 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 
 					return stats
 				}(),
-				Logger: &MockLogger{},
+				DiceGenerator: generator.GenerateDice,
+				Logger:        &MockLogger{},
 			},
 			args: args{
 				request: httptest.NewRequest(
@@ -66,7 +69,8 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 		{
 			name: "error with the tries parameter",
 			fields: fields{
-				Stats: &MockStatsRegister{},
+				Stats:         &MockStatsRegister{},
+				DiceGenerator: nil,
 				Logger: func() httputils.Logger {
 					logger := &MockLogger{}
 					logger.InnerMock.
@@ -105,7 +109,8 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 		{
 			name: "error with the faces parameter",
 			fields: fields{
-				Stats: &MockStatsRegister{},
+				Stats:         &MockStatsRegister{},
+				DiceGenerator: nil,
 				Logger: func() httputils.Logger {
 					logger := &MockLogger{}
 					logger.InnerMock.
@@ -148,8 +153,9 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 
 			responseRecorder := httptest.NewRecorder()
 			diceHandler := DiceHandler{
-				Stats:  tt.fields.Stats,
-				Logger: tt.fields.Logger,
+				Stats:         tt.fields.Stats,
+				DiceGenerator: tt.fields.DiceGenerator,
+				Logger:        tt.fields.Logger,
 			}
 			diceHandler.ServeHTTP(responseRecorder, tt.args.request)
 
