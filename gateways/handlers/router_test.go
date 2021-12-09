@@ -79,7 +79,7 @@ func TestRouter_ServeHTTP(t *testing.T) {
 					data := models.RollStats{"2d3": 5, "4d2": 12}
 
 					stats := &MockStatsCopier{}
-					stats.InnerMock.On("CopyRollStats").Return(data)
+					stats.InnerMock.On("CopyRollStats").Return(data, nil)
 
 					return stats
 				}(),

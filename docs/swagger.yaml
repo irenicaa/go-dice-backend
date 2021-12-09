@@ -63,5 +63,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.RollStats'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
       summary: get stats of dice rolls
 swagger: "2.0"

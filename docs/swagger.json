@@ -65,6 +65,12 @@
                         "schema": {
                             "$ref": "#/definitions/models.RollStats"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }

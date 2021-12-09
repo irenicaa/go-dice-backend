@@ -9,7 +9,7 @@ type MockStatsCopier struct {
 	InnerMock mock.Mock
 }
 
-func (mock *MockStatsCopier) CopyRollStats() models.RollStats {
+func (mock *MockStatsCopier) CopyRollStats() (models.RollStats, error) {
 	results := mock.InnerMock.Called()
-	return results.Get(0).(models.RollStats)
+	return results.Get(0).(models.RollStats), results.Error(1)
 }

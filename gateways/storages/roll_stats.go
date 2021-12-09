@@ -25,7 +25,7 @@ func NewRollStats() RollStats {
 }
 
 // CopyRollStats ...
-func (rollStats RollStats) CopyRollStats() models.RollStats {
+func (rollStats RollStats) CopyRollStats() (models.RollStats, error) {
 	rollStats.mutex.RLock()
 	defer rollStats.mutex.RUnlock()
 
@@ -34,7 +34,7 @@ func (rollStats RollStats) CopyRollStats() models.RollStats {
 		dataCopy[dice] = count
 	}
 
-	return dataCopy
+	return dataCopy, nil
 }
 
 // RegisterDice ...

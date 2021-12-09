@@ -22,9 +22,10 @@ func TestRollStats_CopyRollStats(t *testing.T) {
 	}
 
 	tests := []struct {
-		name   string
-		fields fields
-		want   models.RollStats
+		name    string
+		fields  fields
+		want    models.RollStats
+		wantErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "success",
@@ -38,7 +39,8 @@ func TestRollStats_CopyRollStats(t *testing.T) {
 					return locker
 				}(),
 			},
-			want: models.RollStats{"2d3": 5, "4d2": 12},
+			want:    models.RollStats{"2d3": 5, "4d2": 12},
+			wantErr: assert.NoError,
 		},
 	}
 	for _, tt := range tests {
@@ -47,11 +49,12 @@ func TestRollStats_CopyRollStats(t *testing.T) {
 				data:  tt.fields.data,
 				mutex: tt.fields.mutex,
 			}
-			got := rollStats.CopyRollStats()
+			got, err := rollStats.CopyRollStats()
 			rollStats.data["10d100"] = 23
 
 			tt.fields.mutex.(*MockLocker).InnerMock.AssertExpectations(t)
 			assert.Equal(t, tt.want, got)
+			tt.wantErr(t, err)
 		})
 	}
 }
