@@ -53,6 +53,10 @@ paths:
           description: Bad Request
           schema:
             type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
       summary: generate dice rolls
   /stats:
     get:

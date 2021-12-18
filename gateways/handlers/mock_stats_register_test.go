@@ -9,6 +9,7 @@ type MockStatsRegister struct {
 	InnerMock mock.Mock
 }
 
-func (mock *MockStatsRegister) RegisterDice(dice models.Dice) {
-	mock.InnerMock.Called(dice)
+func (mock *MockStatsRegister) RegisterDice(dice models.Dice) error {
+	results := mock.InnerMock.Called(dice)
+	return results.Error(0)
 }

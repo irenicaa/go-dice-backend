@@ -73,6 +73,7 @@ func TestRollStats_RegisterDice(t *testing.T) {
 		fields   fields
 		args     args
 		wantData models.RollStats
+		wantErr  assert.ErrorAssertionFunc
 	}{
 		{
 			name: "existing key",
@@ -90,6 +91,7 @@ func TestRollStats_RegisterDice(t *testing.T) {
 				dice: models.Dice{Tries: 4, Faces: 2},
 			},
 			wantData: models.RollStats{"2d3": 5, "4d2": 13},
+			wantErr:  assert.NoError,
 		},
 		{
 			name: "not existing key",
@@ -107,6 +109,7 @@ func TestRollStats_RegisterDice(t *testing.T) {
 				dice: models.Dice{Tries: 10, Faces: 100},
 			},
 			wantData: models.RollStats{"2d3": 5, "4d2": 12, "10d100": 1},
+			wantErr:  assert.NoError,
 		},
 	}
 	for _, tt := range tests {
@@ -115,10 +118,11 @@ func TestRollStats_RegisterDice(t *testing.T) {
 				data:  tt.fields.data,
 				mutex: tt.fields.mutex,
 			}
-			rollStats.RegisterDice(tt.args.dice)
+			err := rollStats.RegisterDice(tt.args.dice)
 
 			tt.fields.mutex.(*MockLocker).InnerMock.AssertExpectations(t)
 			assert.Equal(t, tt.wantData, rollStats.data)
+			tt.wantErr(t, err)
 		})
 	}
 }

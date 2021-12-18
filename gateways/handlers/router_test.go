@@ -41,7 +41,7 @@ func TestRouter_ServeHTTP(t *testing.T) {
 					dice := models.Dice{Tries: 2, Faces: 6}
 
 					stats := &MockStatsRegister{}
-					stats.InnerMock.On("RegisterDice", dice).Return()
+					stats.InnerMock.On("RegisterDice", dice).Return(nil)
 
 					return stats
 				}(),

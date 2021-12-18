@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"testing"
+	"testing/iotest"
 
 	"github.com/irenicaa/go-dice-backend/generator"
 	httputils "github.com/irenicaa/go-dice-backend/http-utils"
@@ -38,7 +39,7 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 					dice := models.Dice{Tries: 2, Faces: 6}
 
 					stats := &MockStatsRegister{}
-					stats.InnerMock.On("RegisterDice", dice).Return()
+					stats.InnerMock.On("RegisterDice", dice).Return(nil)
 
 					return stats
 				}(),
@@ -143,6 +144,49 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 					"unable to get the faces parameter: value is incorrect: " +
 						"strconv.Atoi: parsing \"incorrect\": invalid syntax",
 				))),
+				ContentLength: -1,
+			},
+		},
+		{
+			name: "error with registering of a dice",
+			fields: fields{
+				Stats: func() StatsRegister {
+					dice := models.Dice{Tries: 2, Faces: 6}
+
+					stats := &MockStatsRegister{}
+					stats.InnerMock.On("RegisterDice", dice).Return(iotest.ErrTimeout)
+
+					return stats
+				}(),
+				DiceGenerator: generator.GenerateDice,
+				Logger: func() httputils.Logger {
+					logger := &MockLogger{}
+					logger.InnerMock.
+						On("Print", []interface{}{"unable to register the dice: timeout"}).
+						Return().
+						Times(1)
+
+					return logger
+				}(),
+			},
+			args: args{
+				request: httptest.NewRequest(
+					http.MethodPost,
+					"http://example.com/api/v1/dice?tries=2&faces=6",
+					nil,
+				),
+			},
+			wantResponse: &http.Response{
+				Status: strconv.Itoa(http.StatusInternalServerError) + " " +
+					http.StatusText(http.StatusInternalServerError),
+				StatusCode: http.StatusInternalServerError,
+				Proto:      "HTTP/1.1",
+				ProtoMajor: 1,
+				ProtoMinor: 1,
+				Header:     http.Header{},
+				Body: ioutil.NopCloser(bytes.NewReader(
+					[]byte("unable to register the dice: timeout"),
+				)),
 				ContentLength: -1,
 			},
 		},

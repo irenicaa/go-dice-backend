@@ -38,9 +38,11 @@ func (rollStats RollStats) CopyRollStats() (models.RollStats, error) {
 }
 
 // RegisterDice ...
-func (rollStats RollStats) RegisterDice(dice models.Dice) {
+func (rollStats RollStats) RegisterDice(dice models.Dice) error {
 	rollStats.mutex.Lock()
 	defer rollStats.mutex.Unlock()
 
 	rollStats.data[dice.String()]++
+
+	return nil
 }

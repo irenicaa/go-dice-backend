@@ -9,7 +9,7 @@ import (
 
 // StatsRegister ...
 type StatsRegister interface {
-	RegisterDice(dice models.Dice)
+	RegisterDice(dice models.Dice) error
 }
 
 // DiceGenerator ...
@@ -30,6 +30,7 @@ type DiceHandler struct {
 //   @produce json
 //   @success 200 {object} models.RollResults
 //   @failure 400 {string} string
+//   @failure 500 {string} string
 func (diceHandler DiceHandler) ServeHTTP(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -53,7 +54,13 @@ func (diceHandler DiceHandler) ServeHTTP(
 	}
 
 	dice := models.Dice{Tries: tries, Faces: faces}
-	diceHandler.Stats.RegisterDice(dice)
+	if err := diceHandler.Stats.RegisterDice(dice); err != nil {
+		status, message :=
+			http.StatusInternalServerError, "unable to register the dice: %v"
+		httputils.HandleError(writer, diceHandler.Logger, status, message, err)
+
+		return
+	}
 
 	values := diceHandler.DiceGenerator(dice)
 	results := models.NewRollResults(values)
