@@ -13,7 +13,7 @@ type StatsRegister interface {
 }
 
 // DiceGenerator ...
-type DiceGenerator func(dice models.Dice) []int
+type DiceGenerator func(dice models.Dice) ([]int, error)
 
 // DiceHandler ...
 type DiceHandler struct {
@@ -62,7 +62,15 @@ func (diceHandler DiceHandler) ServeHTTP(
 		return
 	}
 
-	values := diceHandler.DiceGenerator(dice)
+	values, err := diceHandler.DiceGenerator(dice)
+	if err != nil {
+		status, message :=
+			http.StatusInternalServerError, "unable to generate dice rolls: %v"
+		httputils.HandleError(writer, diceHandler.Logger, status, message, err)
+
+		return
+	}
+
 	results := models.NewRollResults(values)
 	httputils.HandleJSON(writer, diceHandler.Logger, results)
 }

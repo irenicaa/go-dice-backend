@@ -190,6 +190,51 @@ func TestDiceHandler_ServeHTTP(t *testing.T) {
 				ContentLength: -1,
 			},
 		},
+		{
+			name: "error with generating of dice rolls",
+			fields: fields{
+				Stats: func() StatsRegister {
+					dice := models.Dice{Tries: 2, Faces: 6}
+
+					stats := &MockStatsRegister{}
+					stats.InnerMock.On("RegisterDice", dice).Return(nil)
+
+					return stats
+				}(),
+				DiceGenerator: func(dice models.Dice) ([]int, error) {
+					return nil, iotest.ErrTimeout
+				},
+				Logger: func() httputils.Logger {
+					logger := &MockLogger{}
+					logger.InnerMock.
+						On("Print", []interface{}{"unable to generate dice rolls: timeout"}).
+						Return().
+						Times(1)
+
+					return logger
+				}(),
+			},
+			args: args{
+				request: httptest.NewRequest(
+					http.MethodPost,
+					"http://example.com/api/v1/dice?tries=2&faces=6",
+					nil,
+				),
+			},
+			wantResponse: &http.Response{
+				Status: strconv.Itoa(http.StatusInternalServerError) + " " +
+					http.StatusText(http.StatusInternalServerError),
+				StatusCode: http.StatusInternalServerError,
+				Proto:      "HTTP/1.1",
+				ProtoMajor: 1,
+				ProtoMinor: 1,
+				Header:     http.Header{},
+				Body: ioutil.NopCloser(bytes.NewReader(
+					[]byte("unable to generate dice rolls: timeout"),
+				)),
+				ContentLength: -1,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

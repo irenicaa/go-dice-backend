@@ -7,12 +7,12 @@ import (
 )
 
 // GenerateDice ...
-func GenerateDice(dice models.Dice) []int {
+func GenerateDice(dice models.Dice) ([]int, error) {
 	var values []int
 	for try := 0; try < dice.Tries; try++ {
 		value := rand.Intn(dice.Faces) + 1
 		values = append(values, value)
 	}
 
-	return values
+	return values, nil
 }
