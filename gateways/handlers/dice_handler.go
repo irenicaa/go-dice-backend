@@ -23,7 +23,7 @@ type DiceHandler struct {
 }
 
 // ServeHTTP ...
-//   @router /dice [GET]
+//   @router /dice [POST]
 //   @summary generate dice rolls
 //   @param tries query integer true "amount of roll tries" minimum(1) maximum(100)
 //   @param faces query integer true "amount of dice faces" minimum(2) maximum(100)

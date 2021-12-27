@@ -12,7 +12,7 @@
     "basePath": "/api/v1",
     "paths": {
         "/dice": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],
