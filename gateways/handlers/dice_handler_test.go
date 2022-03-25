@@ -11,8 +11,8 @@ import (
 	"testing/iotest"
 
 	"github.com/irenicaa/go-dice-backend/generator"
-	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
+	httputils "github.com/irenicaa/go-http-utils"
 	"github.com/stretchr/testify/assert"
 )
 

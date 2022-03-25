@@ -11,7 +11,7 @@ import (
 	"github.com/irenicaa/go-dice-backend/gateways/handlers"
 	"github.com/irenicaa/go-dice-backend/gateways/storages"
 	"github.com/irenicaa/go-dice-backend/generator"
-	httputils "github.com/irenicaa/go-dice-backend/http-utils"
+	"github.com/irenicaa/go-http-utils/middlewares"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 
 	stats := storages.NewRollStats()
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
-	handler := httputils.LoggingMiddleware(
+	handler := middlewares.LoggingMiddleware(
 		handlers.Router{
 			BaseURL: "/api/v1",
 			DiceHandler: handlers.DiceHandler{

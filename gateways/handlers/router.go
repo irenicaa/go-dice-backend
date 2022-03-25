@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	httputils "github.com/irenicaa/go-dice-backend/http-utils"
+	httputils "github.com/irenicaa/go-http-utils"
 )
 
 // Router ...

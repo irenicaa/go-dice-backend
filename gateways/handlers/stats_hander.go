@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	httputils "github.com/irenicaa/go-dice-backend/http-utils"
 	"github.com/irenicaa/go-dice-backend/models"
+	httputils "github.com/irenicaa/go-http-utils"
 )
 
 // StatsCopier ...
