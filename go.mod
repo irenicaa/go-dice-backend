@@ -1,4 +1,4 @@
-module github.com/irenicaa/go-dice-backend
+module github.com/irenicaa/go-dice-backend/v2
 
 go 1.15
 

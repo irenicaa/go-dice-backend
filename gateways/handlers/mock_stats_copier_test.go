@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/irenicaa/go-dice-backend/models"
+	"github.com/irenicaa/go-dice-backend/v2/models"
 	"github.com/stretchr/testify/mock"
 )
 

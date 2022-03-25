@@ -8,9 +8,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/irenicaa/go-dice-backend/gateways/handlers"
-	"github.com/irenicaa/go-dice-backend/gateways/storages"
-	"github.com/irenicaa/go-dice-backend/generator"
+	"github.com/irenicaa/go-dice-backend/v2/gateways/handlers"
+	"github.com/irenicaa/go-dice-backend/v2/gateways/storages"
+	"github.com/irenicaa/go-dice-backend/v2/generator"
 	"github.com/irenicaa/go-http-utils/middlewares"
 )
 

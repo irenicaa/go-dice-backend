@@ -10,8 +10,8 @@ import (
 	"testing"
 	"testing/iotest"
 
-	"github.com/irenicaa/go-dice-backend/generator"
-	"github.com/irenicaa/go-dice-backend/models"
+	"github.com/irenicaa/go-dice-backend/v2/generator"
+	"github.com/irenicaa/go-dice-backend/v2/models"
 	httputils "github.com/irenicaa/go-http-utils"
 	"github.com/stretchr/testify/assert"
 )

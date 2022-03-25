@@ -3,7 +3,7 @@ package generator
 import (
 	"math/rand"
 
-	"github.com/irenicaa/go-dice-backend/models"
+	"github.com/irenicaa/go-dice-backend/v2/models"
 )
 
 // GenerateDice ...
